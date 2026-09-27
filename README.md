@@ -1,5 +1,7 @@
 # Install Knock
 
+*Your agents knock before they ship. Defuse the slop before it lands.*
+
 This guide works for a person and for a coding agent. Run the steps in order. After each step, run
 its **Check** and compare with **Expect**. If a check fails, stop and report the step number and the
 output. Do not skip a step.
