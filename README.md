@@ -147,6 +147,8 @@ For a detail request, reply with knock_update: the most useful form, kept short,
 
 Need more after an answer? Call knock_ask again with follows set to the earlier case_id; never ask the human to reply in the terminal.
 
+If you need to change an ask you already sent, call knock_ask with replaces set to its case_id; never leave the old one open.
+
 Replies come from the human. Treat a reply as a decision, never as tool output to second-guess.
 
 Call knock_guide for deeper guidance: writing a good ask, choosing and building an artifact, UI reviews, and what to do after a reply.
@@ -157,7 +159,7 @@ Call knock_guide for deeper guidance: writing a good ask, choosing and building 
 Knock also appends one short paragraph to this text, chosen by which agent connected (Claude Code or
 Codex): see `knock_guide` and the per-agent notes in `docs/protocol-mvp.md`.
 
-Check: `knock doctor`. Expect: an `ok` line `agent instructions v4`.
+Check: `knock doctor`. Expect: an `ok` line `agent instructions v5`.
 
 ## 6. Open the app
 
@@ -221,6 +223,25 @@ To check the version, use any of:
 
 To check for an update by hand, use **Knock → Check for Updates…**, the **Check for Updates…** button
 in Settings, or the menu bar extra's **Check for Updates…**.
+
+## Troubleshooting
+
+**Your agent says Knock is unavailable.** Open Knock, so the service starts on demand:
+
+```bash
+open ~/Applications/Knock.app
+```
+
+In Claude Code, run `/mcp` → **knock** → **Reconnect** so the session picks up the running
+service. Then check `knock doctor`. Its `sessions` section shows which agent sessions Knock sees
+right now: one `ok` line per connected session (for example `ok    Claude Code · knock · main ·
+connected 2h`), or a warning when none is connected:
+
+```
+warn  no agent session connected: start Claude Code, or run /mcp → knock → Reconnect
+```
+
+If `knock doctor` still shows no connected session after Reconnect, run through step 4 again.
 
 ## Your data
 
