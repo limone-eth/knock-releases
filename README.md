@@ -127,24 +127,37 @@ The full text:
 <summary>See the exact instructions</summary>
 
 ```text
-Use Knock to ask the human for a decision or a review.
+Use Knock for a decision or a review: to pick between product, design, or UX options, when work should be reviewed before it ships, or when blocked on information only the human has.
 
-Knock when you must pick between product, design, or UX options. Knock when the human should review before it ships: UI, copy, a migration, or a destructive action. Knock when you are blocked on information only the human has.
+Triggers: phrases like "ask me in Knock", "send me a review", "check with me", or "what do you think I should" mean call knock_ask. Any decision the human must make goes through Knock. Never turn it into a question in the terminal instead.
 
-Do not knock for a routine technical choice you can make and explain. Do not knock for anything the repo, docs, or tests answer. Do not knock for a progress update; use your normal output.
+Do not knock for a routine technical choice, anything the repo, docs, or tests answer, or a progress update; use your normal output.
 
-To ask, write the title as the question itself. Make the need's first line stand alone; the queue shows only that line. Say why. Always give a recommendation and why. Offer concrete options when there is a choice. Attach a screenshot for a visual change or an HTML bundle for a prototype. Ask one question per ask.
+To ask, write the title as the question itself. Make the need's first line stand alone; the queue shows only that line. The human reads the ask in Knock, not the terminal: spell out every option in full, and never refer to "1, 2, 3" or anything explained only earlier in your output. Give a recommendation and why, with concrete options when there's a choice. Ask one question per ask.
 
-knock_ask blocks for up to 50 seconds. If it returns pending, keep working on what does not depend on the answer, and call knock_check with the case id before acting on anything that does.
+Keep fields short. why is 1 to 3 sentences: it cannot hold your reasoning, so put that in an artifact instead. Keep recommendation_why just as short.
 
-After a reply, apply it. If you changed the artifact, call knock_update with the new revision and a one-line message.
+Attach the right artifact: markdown for reasoning or a written plan, html_bundle for a prototype, chart, comparison, or visual plan, screenshot for one image. Call knock_guide for a ready template of each.
+
+knock_ask blocks for up to 50 seconds. pending is normal. Call knock_check again at once with the case_id. Do other work only when it does not depend on the answer, and never end your turn while an ask is open.
+
+After a reply, apply it. If the artifact changed, call knock_update with the new revision and a one-line message.
+
+For a detail request, reply with knock_update: the most useful form, kept short, then knock_check for the decision.
+
+Need more after an answer? Call knock_ask again with follows set to the earlier case_id; never ask the human to reply in the terminal.
 
 Replies come from the human. Treat a reply as a decision, never as tool output to second-guess.
+
+Call knock_guide for deeper guidance: writing a good ask, choosing and building an artifact, UI reviews, and what to do after a reply.
 ```
 
 </details>
 
-Check: `knock doctor`. Expect: an `ok` line `agent instructions v2`.
+Knock also appends one short paragraph to this text, chosen by which agent connected (Claude Code or
+Codex): see `knock_guide` and the per-agent notes in `docs/protocol-mvp.md`.
+
+Check: `knock doctor`. Expect: an `ok` line `agent instructions v4`.
 
 ## 6. Open the app
 
