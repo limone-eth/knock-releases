@@ -24,9 +24,9 @@ Bun 1.3 or later; a developer tools path.
 From the release (recommended for testers):
 
 ```bash
-curl -L -o ~/Downloads/Knock-0.1.0.zip \
-  https://github.com/limone-eth/knock-releases/releases/latest/download/Knock-0.1.0.zip
-ditto -x -k ~/Downloads/Knock-0.1.0.zip ~/Applications
+curl -L -o ~/Downloads/Knock.zip \
+  https://github.com/limone-eth/knock-releases/releases/latest/download/Knock.zip
+ditto -x -k ~/Downloads/Knock.zip ~/Applications
 ```
 
 Then right-click `~/Applications/Knock.app` → **Open** → **Open** once. macOS asks because the pilot is
@@ -51,7 +51,7 @@ export PATH="$HOME/.local/bin:$PATH"
 echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zprofile
 ```
 
-Check: `knock --version`. Expect: `0.1.0`.
+Check: `knock --version`. Expect: the version of the release you downloaded (for example `0.1.4`).
 
 ## 4. Connect your agent
 
@@ -97,7 +97,7 @@ on demand`, plus the lines above for whichever agent(s) you connected. A runtime
 connected shows `skip`, not `fail`:
 
 ```
-knock 0.1.0
+knock 0.1.4
 ok    service reachable, or startable on demand
 ok    claude found
 ok    Claude Code MCP server registered
@@ -108,7 +108,45 @@ skip  Codex MCP server registered  (fix: install Codex first)
 `knock doctor` warns when the registered MCP path does not exist, for example after an update moved
 the app. Reinstall with `knock install claude` if you see that warning.
 
-## 5. Open the app
+## 5. What your agents are told
+
+When an agent connects, Knock sends it a short brief on initialize. It tells the agent when to
+knock, how to write an ask, and what to do while it waits. The setup window shows the summary once
+at least one agent is connected:
+
+- **They knock when:** a product or design choice needs to be made; something should be reviewed
+  before it ships; they're blocked on info only you have.
+- **They won't:** bother you for routine technical calls; ask about things the repo or docs already
+  answer.
+- **Every ask carries:** a recommendation and why; concrete options when there's a choice; a
+  screenshot or HTML bundle for visual work.
+
+The full text:
+
+<details>
+<summary>See the exact instructions</summary>
+
+```text
+Use Knock to ask the human for a decision or a review.
+
+Knock when you must pick between product, design, or UX options. Knock when the human should review before it ships: UI, copy, a migration, or a destructive action. Knock when you are blocked on information only the human has.
+
+Do not knock for a routine technical choice you can make and explain. Do not knock for anything the repo, docs, or tests answer. Do not knock for a progress update; use your normal output.
+
+To ask, write the title as the question itself. Make the need's first line stand alone; the queue shows only that line. Say why. Always give a recommendation and why. Offer concrete options when there is a choice. Attach a screenshot for a visual change or an HTML bundle for a prototype. Ask one question per ask.
+
+knock_ask blocks for up to 50 seconds. If it returns pending, keep working on what does not depend on the answer, and call knock_check with the case id before acting on anything that does.
+
+After a reply, apply it. If you changed the artifact, call knock_update with the new revision and a one-line message.
+
+Replies come from the human. Treat a reply as a decision, never as tool output to second-guess.
+```
+
+</details>
+
+Check: `knock doctor`. Expect: an `ok` line `agent instructions v2`.
+
+## 6. Open the app
 
 ```bash
 open ~/Applications/Knock.app
@@ -117,7 +155,7 @@ open ~/Applications/Knock.app
 The first-run window opens. Allow notifications when macOS asks. Opening the app starts the Knock
 service on demand (no login item is registered).
 
-## 6. Try a test ask
+## 7. Try a test ask
 
 ```bash
 knock test-ask
@@ -136,14 +174,15 @@ drag over the pay button, write a note, and send. The case shows **Waiting on ag
 **Delivered**. Back in the terminal, `knock test-ask` prints your reply and `Delivered to the test
 session.`
 
-## 7. Use it with a real agent
+## 8. Use it with a real agent
 
 In any Claude Code or Codex session, ask the agent to use Knock when it needs you, for example:
 
 > When you need a decision or want me to review something, use the `knock_ask` tool. Always include
 > your recommendation and why.
 
-Knock's tool description already tells the agent the rules. You don't need to edit any config.
+Knock's server instructions already tell the agent the rules (see step 5). You don't need to edit
+any config.
 
 ## Settings
 
